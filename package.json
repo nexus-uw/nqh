@@ -1,0 +1,20 @@
+{
+  "name": "nqh",
+  "version": "0.0.1",
+  "description": "An implementation of Angular's $http service for NodeJS",
+  "main": "index.js",
+  "private": false,
+	"repository":"git@github.com:nexus-uw/node-q-http.git",
+  "scripts": {
+    "test": "mocha -R 'spec'",
+		"start": "node index.js"
+  },
+  "dependencies": {
+    "q": "^1.0.1",
+    "request": "^2.36.0"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.20.1"
+  }
+}
