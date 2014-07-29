@@ -1,7 +1,8 @@
 var request = require('request')
  
   , Q = require('q')
-  , nqh = module.exports
+  , nqh = module.exports = function(config) { 
+  };
 
 var makeRequest = function (url, body1, headers, method) {
   var deferred = Q.defer();
@@ -37,9 +38,6 @@ var makeRequest = function (url, body1, headers, method) {
 
   return deferred.promise;
 };
-
-
-
 nqh.post = function (url, body, config) {
   var headers = config ? config.headers : {};
 
@@ -69,7 +67,8 @@ nqh.head = function(url, config) {
 };
 
 nqh.jsonp = function(url, config) {
-  throw new Error('JSONP not implemented');  
+  throw new Error('JSONP not implemented');
+  //https://www.npmjs.org/package/jsonp-utils  
   var headers = config ? config.headers : {};
 
 };
