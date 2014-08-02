@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - "0.10"
+addons:
+  code_climate:
+    repo_token: ebe1800f5b97669a1ad72d09e34c4404b307eac11cde1e747e62f5c9c56e01ca
+after_script:
+  - cat coverage/lcov.info | codeclimate
