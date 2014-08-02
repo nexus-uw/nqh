@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect
-  , q = require('q')  
+  , q = require('q')
   , express = require('express')
   , bodyParser = require('body-parser')
   , nqh = require('../nqh');
@@ -9,15 +9,52 @@ var expect = require('chai').expect
 describe('nqh',function(){
   it('should exist',function(){
     expect(nqh).to.be.defined;
-    expect(nqh).to.be.a('function');    
-    expect(nqh.get).to.be.a('function');    
-    expect(nqh.put).to.be.a('function');    
-    expect(nqh.post).to.be.a('function');    
-    expect(nqh.delete).to.be.a('function');    
-    expect(nqh.head).to.be.a('function');    
-    expect(nqh.jsonp).to.be.a('function');    
-    expect(nqh.patch).to.be.a('function'); 
+    expect(nqh).to.be.a('function');
+    expect(nqh({}).success).to.be.a('function');
+    expect(nqh({}).error).to.be.a('function');
+    expect(nqh.get).to.be.a('function');
+    expect(nqh.put).to.be.a('function');
+    expect(nqh.post).to.be.a('function');
+    expect(nqh.delete).to.be.a('function');
+    expect(nqh.head).to.be.a('function');
+    expect(nqh.jsonp).to.be.a('function');
+    expect(nqh.patch).to.be.a('function');
   });
+
+   describe('special promise callbacks',function(){
+    var server
+      , app
+      , reqPort = 4321;
+
+    before(function(){
+      app = express();
+      app.get('/200', function(req, res){
+        res.status(200).send('200 OK');
+      });
+      server = app.listen(reqPort);
+
+    });
+
+    it('should call the success callback for successful calls',function(done){
+      nqh.get('http://localhost:'+reqPort+'/200')
+        .success(function(){
+          done();
+        })
+        .then(null,done);
+    });
+
+    it('should call the error callback if the request fails',function(done){
+      nqh.get('http://localhost:'+reqPort+'/404')
+        .error(function(){
+          done();
+        });
+    });
+
+    after(function(){
+      server.close();
+    })
+  });//GET
+
 
   describe('GET',function(){
     var server
@@ -48,7 +85,7 @@ describe('nqh',function(){
         .then(done,function(e){
           expect(e).to.be.truely;
           expect(e.status).to.equal(404);
-          done();        
+          done();
         })
         .then(null,done);
     });
@@ -90,7 +127,7 @@ describe('nqh',function(){
       nqh.post('http://localhost:'+reqPort+'/404')
         .then(done,function(e){
           expect(e.status).to.equal(404);
-          done();        
+          done();
         })
         .then(null,done);
     });
