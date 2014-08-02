@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/nexus-uw/nqh",
   "scripts": {
-    "test": "mocha -R 'spec'"
+    "test": "istanbul cover _mocha -- -R spec"
   },
   "directories": {
     "test": "test"
@@ -33,7 +33,9 @@
   "devDependencies": {
     "body-parser": "^1.4.3",
     "chai": "^1.9.1",
+    "codeclimate-test-reporter": "0.0.3",
     "express": "^4.7.1",
+    "istanbul": "^0.3.0",
     "mocha": "^1.20.1"
   }
 }
