@@ -1,13 +1,12 @@
-var request = require('request')
-var Jsonp = require("jsonp-utils");
+var request = require('request');
 var  Q = require('q');
 
 //returns a promise that resolves to an object with the following properties
-// data – {string|Object} – The response body transformed with the transform functions.
-// status – {number} – HTTP status code of the response.
-// headers – {function([headerName])} – Header getter function.
-// config – {Object} – The configuration object that was used to generate the request.
-// statusText – {string} – HTTP status text of the response.
+// data – string|Object – The response body transformed with the transform functions.
+// status – number – HTTP status code of the response.
+// headers – function([headerName]) – Header getter function.
+// config – Object – The configuration object that was used to generate the request.
+// statusText – string – HTTP status text of the response.
 var nqh = module.exports = function(config) {
   var deferred = Q.defer();
   request({
@@ -36,10 +35,11 @@ var nqh = module.exports = function(config) {
         config : config,
         statusText : response.statusCode + ' ' + response.statusCode <= 299 && response.statusCode >= 200 ? 'OK':'FAILED'
       };
-      if(result.status <= 299 && result.status >= 200)
+      if(result.status <= 299 && result.status >= 200){
         deferred.resolve(result);
-      else
+      }else{
         deferred.reject(result);
+      }
     }
   });
 
@@ -61,72 +61,44 @@ var nqh = module.exports = function(config) {
 
 };
 
+var formShortCut = function(method,url,config,body){
+  if(typeof config === 'undefined' || ! config){
+    config = {};
+  }
+  config.method = method;
+  config.url = url;
+  config.body = body;
+  return nqh(config);
+}
+
 /*--- shortcut methods ----*/
 
 nqh.post = function (url, body, config) {
-  if(typeof config === 'undefined' || ! config){
-    config = {};
-  }
-  config.method = 'POST';
-  config.url = url;
-  config.body = body;
-  return this(config);
+  return formShortCut('POST',url,config,body);
 };
 
 nqh.get = function (url, config) {
-  if(typeof config === 'undefined' || ! config){
-    config = {};
-  }
-  config.method = 'GET';
-  config.url = url;
-  return this(config);
+  return formShortCut('GET',url,config);
 };
 
 nqh.delete = function(url,config){
- if(typeof config === 'undefined' || ! config){
-    config = {};
-  }
-  config.method = 'DELETE';
-  config.url = url;
-  return this(config);
+  return formShortCut('DELETE',url,config);
 };
 
 nqh.put = function(url, body, config) {
-  if(typeof config === 'undefined' || ! config){
-    config = {};
-  }
-  config.method = 'PUT';
-  config.url = url;
-  config.body = body;
-  return this(config);
+  return formShortCut('PUT',url,config,body);
 };
 
 nqh.head = function(url, config) {
- if(typeof config === 'undefined' || ! config){
-    config = {};
-  }
-  config.method = 'HEAD';
-  config.url = url;
-  return this(config);
+  return formShortCut('HEAD',url,config);
 };
 
 nqh.jsonp = function(url, config) {
- if(typeof config === 'undefined' || ! config){
-    config = {};
-  }
-
-  config.url = url;
-  return this(config);
+  return formShortCut('GET',url,config);
 };
 
-nqh.patch = function(url, data, config){
-  if(typeof config === 'undefined' || ! config){
-    config = {};
-  }
-  config.method = 'PATCH';
-  config.body = data;
-  config.url = url;
-  return this(config);
+nqh.patch = function(url, body, config){
+  return formShortCut('PATCH',url,config,body);
 };
 
 nqh.pendingRequests = [];

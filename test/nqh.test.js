@@ -66,6 +66,10 @@ describe('nqh',function(){
       app.get('/200', function(req, res){
         res.status(200).send('200 OK');
       });
+      app.get('/500', function(req, res){
+        res.status(500).send('NOT OK');
+      });
+
       server = app.listen(reqPort);
 
     });
@@ -73,6 +77,10 @@ describe('nqh',function(){
     it('should make a GET request',function(done){
       nqh.get('http://localhost:'+reqPort+'/200')
         .then(function(res){
+          expect(res.headers).to.be.a('function');
+          expect(res.headers('')).to.be.truely;
+          expect(res.config).to.be.an('object');
+          expect(res.statusText).to.be.a('string');
           expect(res.status).to.equal(200);
           expect(res.data).to.equal('200 OK');
           done();
@@ -81,10 +89,20 @@ describe('nqh',function(){
     });
 
     it('should reject the promise if the request fails',function(done){
-      nqh.get('http://localhost:'+reqPort+'/404')
+      nqh.get('http://localhost:'+reqPort+'/404',null)
         .then(done,function(e){
           expect(e).to.be.truely;
           expect(e.status).to.equal(404);
+          done();
+        })
+        .then(null,done);
+    });
+
+    it('should reject the promise if the request returned an error',function(done){
+      nqh.get('http://localhost:'+reqPort+'/500')
+        .then(done,function(e){
+          expect(e).to.be.truely;
+          expect(e.status).to.equal(500);
           done();
         })
         .then(null,done);
