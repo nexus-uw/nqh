@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "jsonp-utils": "0.0.3",
-    "q": "^1.0.1",
+    "q": "^2.0.2",
     "request": "^2.36.0"
   },
   "devDependencies": {
