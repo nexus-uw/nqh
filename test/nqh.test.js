@@ -236,17 +236,18 @@ describe('nqh',function(){
 
     before(function(){
       app = express();
-      app.use(function(req,res){
-        if(req.method ==='jsonp')
-          res.status(200).send('pass');
-        else
-          res.status(400).send('expected jsonp req')
+      app.set("jsonp callback", true);
+      app.get('/jsonp',function(req,res){
+        res.header('Content-Type', 'application/json');
+        res.header('Charset', 'utf-8')
+        res.send(req.query.callback + '({"something": "rather", "more": "pork", "tua": "tara"});');
       });
+
       server = app.listen(reqPort);
     });
 
-    xit('should make a jsonp request',function(done){
-      nqh.jsonp('http://localhost:'+reqPort+'/jsonp')
+    it('should make a jsonp request',function(done){
+      nqh.jsonp('http://localhost:'+reqPort+'/jsonp?callback=MyMethod')
         .then(function(res){
           expect(res.status).to.equal(200);
           done();

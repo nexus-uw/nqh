@@ -1,7 +1,8 @@
 var request = require('request')
+var Jsonp = require("jsonp-utils");
+var  Q = require('q');
 
-  , Q = require('q');
-  //returns a promise that resolves to an object with the following properties
+//returns a promise that resolves to an object with the following properties
 // data – {string|Object} – The response body transformed with the transform functions.
 // status – {number} – HTTP status code of the response.
 // headers – {function([headerName])} – Header getter function.
@@ -110,10 +111,12 @@ nqh.head = function(url, config) {
 };
 
 nqh.jsonp = function(url, config) {
-  throw new Error('JSONP not implemented');
-  //https://www.npmjs.org/package/jsonp-utils
-  var headers = config ? config.headers : {};
+ if(typeof config === 'undefined' || ! config){
+    config = {};
+  }
 
+  config.url = url;
+  return this(config);
 };
 
 nqh.patch = function(url, data, config){
@@ -121,6 +124,7 @@ nqh.patch = function(url, data, config){
     config = {};
   }
   config.method = 'PATCH';
+  config.body = data;
   config.url = url;
   return this(config);
 };
