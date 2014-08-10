@@ -13,7 +13,7 @@ Road Map
 
  ~~3 create nqh({config})~~
 
- 4 control pendingRequests
+ ~~4 control pendingRequests~~
 
  5 cache results
 
