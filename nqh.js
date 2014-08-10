@@ -1,5 +1,6 @@
 var request = require('request');
 var  Q = require('q');
+var _ = require('lodash');
 
 //returns a promise that resolves to an object with the following properties
 // data – string|Object – The response body transformed with the transform functions.
@@ -9,12 +10,15 @@ var  Q = require('q');
 // statusText – string – HTTP status text of the response.
 var nqh = module.exports = function(config) {
   var deferred = Q.defer();
+  nqh.pendingRequests.push(config);
+
   request({
     method:config.method,
     url:config.url,
     headers:config.headers,
     body:JSON.stringify(config.body)
   },function (error, response, body) {
+    _.remove(nqh.pendingRequests,config);
     if(error){
       deferred.reject(error);
     }else {
@@ -25,9 +29,6 @@ var nqh = module.exports = function(config) {
       }catch(e){
         data = body;
       }
-
-
-
       var result = {
         data : data,
         status : response.statusCode,
@@ -41,6 +42,7 @@ var nqh = module.exports = function(config) {
         deferred.reject(result);
       }
     }
+    return deferred.promise;
   });
 
   deferred.promise.success = function(fn) {
@@ -102,3 +104,5 @@ nqh.patch = function(url, body, config){
 };
 
 nqh.pendingRequests = [];
+
+nqh.defaults = {};

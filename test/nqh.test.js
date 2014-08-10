@@ -19,6 +19,8 @@ describe('nqh',function(){
     expect(nqh.head).to.be.a('function');
     expect(nqh.jsonp).to.be.a('function');
     expect(nqh.patch).to.be.a('function');
+    expect(nqh.defaults).to.be.an('object');
+    expect(nqh.pendingRequests).to.be.an('Array');
   });
 
    describe('special promise callbacks',function(){
@@ -307,6 +309,37 @@ describe('nqh',function(){
       server.close();
     })
   });//PATCH
+
+  describe('pendingRequests',function(){
+    var server
+      , app
+      , reqPort = 4321;
+
+    before(function(){
+      app = express();
+      app.get('/',function(req,res){
+        res.status(200).send('ok');
+      });
+      server = app.listen(reqPort);
+    });
+
+    it('should put the config into the array and remove when the req completes',function(done){
+      var before = nqh.pendingRequests.length
+      var req = nqh.get('http://localhost:'+reqPort+'/');
+      expect(nqh.pendingRequests).to.have.length(before+1);
+
+      return req.then(function(){
+        expect(nqh.pendingRequests).to.have.length(before);
+        done();
+      })
+      .then(null,done);
+
+    });
+
+    after(function(){
+      server.close();
+    })
+  });//pendingRequests
 
 });//nqh
 
