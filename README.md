@@ -9,7 +9,7 @@ Road Map
 --------
  ~~1 nqh.jsonp()~~
 
- 2 preserve http 403 error codes
+ 2 preserve http error codes
 
  ~~3 create nqh({config})~~
 
@@ -17,6 +17,6 @@ Road Map
 
  5 cache results
 
- 6 build url queries
+ ~~6 build url queries~~
 
  7 handle all config options

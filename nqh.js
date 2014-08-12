@@ -1,6 +1,8 @@
 var request = require('request');
 var  Q = require('q');
 var _ = require('lodash');
+var utils = require('./lib/utils');
+
 
 //returns a promise that resolves to an object with the following properties
 // data – string|Object – The response body transformed with the transform functions.
@@ -14,7 +16,7 @@ var nqh = module.exports = function(config) {
 
   request({
     method:config.method,
-    url:config.url,
+    url : utils.buildUrl(config.url,config.params),
     headers:config.headers,
     body:JSON.stringify(config.body)
   },function (error, response, body) {
