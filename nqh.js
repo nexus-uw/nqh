@@ -2,7 +2,7 @@ var request = require('request');
 var  Q = require('q');
 var _ = require('lodash');
 var utils = require('./lib/utils');
-
+var hstd = require('http-status-to-description');
 
 //returns a promise that resolves to an object with the following properties
 // data – string|Object – The response body transformed with the transform functions.
@@ -36,7 +36,7 @@ var nqh = module.exports = function(config) {
         status : response.statusCode,
         headers : function(headerName){return response.headers[headerName];},
         config : config,
-        statusText : response.statusCode + ' ' + response.statusCode <= 299 && response.statusCode >= 200 ? 'OK':'FAILED'
+        statusText :  !_.isUndefined(data) && !_.isNull(data) && data ? data : hstd(response.statusCode)
       };
       if(result.status <= 299 && result.status >= 200){
         deferred.resolve(result);

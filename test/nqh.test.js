@@ -71,7 +71,9 @@ describe('nqh',function(){
       app.get('/500', function(req, res){
         res.status(500).send('NOT OK');
       });
-
+      app.get('/401', function(req, res){
+        res.status(401).end();
+      });
       server = app.listen(reqPort);
 
     });
@@ -105,6 +107,18 @@ describe('nqh',function(){
         .then(done,function(e){
           expect(e).to.be.truely;
           expect(e.status).to.equal(500);
+          done();
+        })
+        .then(null,done);
+    });
+
+
+    it('should should generate the generic http description if the server failed to send one',function(done){
+      nqh.get('http://localhost:'+reqPort+'/401')
+        .then(done,function(e){
+          expect(e).to.be.truely;
+          expect(e.status).to.equal(401);
+          expect(e.statusText).to.equal('Unauthorized');
           done();
         })
         .then(null,done);
