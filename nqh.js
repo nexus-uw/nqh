@@ -3,6 +3,14 @@ var  Q = require('q');
 var _ = require('lodash');
 var utils = require('./lib/utils');
 var hstd = require('http-status-to-description');
+var NodeCache = require( "node-cache" );
+
+//caching layer
+var cache = new NodeCache({
+  stdTTL : process.env.nqh_stdTTL || 0,
+  checkperiod : process.env.nqh_checkperiod || 0
+});
+
 
 //returns a promise that resolves to an object with the following properties
 // data – string|Object – The response body transformed with the transform functions.
@@ -12,6 +20,17 @@ var hstd = require('http-status-to-description');
 // statusText – string – HTTP status text of the response.
 var nqh = module.exports = function(config) {
   var deferred = Q.defer();
+
+  //if the request is set to cache the GET result
+  // and the url is found in the cache, then return the value and exit
+  if(config.cache && config.method === 'GET'){
+    var cached = cache.get(config.url)[config.url];
+    if(cached){
+      deferred.resolve(cached);
+      return deferred.promise;
+    }
+  }
+
   nqh.pendingRequests.push(config);
 
   request({
@@ -39,6 +58,9 @@ var nqh = module.exports = function(config) {
         statusText :  !_.isUndefined(data) && !_.isNull(data) && data ? data : hstd(response.statusCode)
       };
       if(result.status <= 299 && result.status >= 200){
+        if(config.cache && config.method === 'GET'){
+          cache.set(config.url,result);
+        }
         deferred.resolve(result);
       }else{
         deferred.reject(result);

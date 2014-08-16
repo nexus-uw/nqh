@@ -352,8 +352,85 @@ describe('nqh',function(){
 
     after(function(){
       server.close();
-    })
+    });
   });//pendingRequests
+
+  describe('Caching',function(){
+    var server
+      , app
+      , reqPort = 4321;
+
+    before(function(){
+      app = express();
+      app.get('/',function(req,res){
+        res.status(200).send('some random Number :' + Math.random());
+      });
+      app.post('/',function(req,res){
+        res.status(201).send('some random Number :' + Math.random());
+      });
+      server = app.listen(reqPort);
+    });
+
+    it('should cache the GET result if config.cache is true',function(done){
+      var firstResult;
+      return nqh.get('http://localhost:'+reqPort+'/',{cache:true})
+        .then(function(result){
+        firstResult = result.data;
+        return nqh.get('http://localhost:'+reqPort+'/',{cache:true});
+      })
+      .then(function(result){
+        expect(result.data).to.equal(firstResult);
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should ignore the cache if the method is not HTTP regardless of the config',function(done){
+      var firstResult;
+      return nqh.post('http://localhost:'+reqPort+'/',{cache:true})
+        .then(function(result){
+        firstResult = result.data;
+        return nqh.post('http://localhost:'+reqPort+'/',{cache:true});
+      })
+      .then(function(result){
+        expect(result.data).to.not.equal(firstResult);
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should not cache the result if config.cache is false',function(done){
+      var firstResult;
+      return nqh.get('http://localhost:'+reqPort+'/',{cache:false})
+        .then(function(result){
+        firstResult = result.data;
+        return nqh.get('http://localhost:'+reqPort+'/',{cache:true});
+      })
+      .then(function(result){
+        expect(result.data).to.not.equal(firstResult);
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should skip the cache if config.cache is true',function(done){
+      var firstResult;
+      return nqh.get('http://localhost:'+reqPort+'/',{cache:true})
+        .then(function(result){
+        firstResult = result.data;
+        return nqh.get('http://localhost:'+reqPort+'/',{cache:false});
+      })
+      .then(function(result){
+        expect(result.data).to.not.equal(firstResult);
+        done();
+      })
+      .then(null,done);
+    });
+
+    after(function(){
+      server.close();
+    });
+  });//caching
 
 });//nqh
 
