@@ -9,7 +9,7 @@ Road Map
 --------
  ~~1 nqh.jsonp()~~
 
- 2 preserve http error codes
+~~ 2 preserve http error codes~~
 
  ~~3 create nqh({config})~~
 
