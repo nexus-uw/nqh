@@ -13,3 +13,10 @@ The caching layer uses [tcs-de/nodecache](https://github.com/tcs-de/nodecache) a
 Road Map
 --------
  - handle all config options
+    -  xsrfHeaderName – {string} – Name of HTTP header to populate with the XSRF token.
+    - xsrfCookieName – {string} – Name of cookie containing the XSRF token.
+    - transformRequest – {function(data, headersGetter)|Array.<function(data, headersGetter)>} – transform function or an array of such functions. The transform function takes the http request body and headers and returns its transformed (typically serialized) version.
+    - transformResponse – {function(data, headersGetter)|Array.<function(data, headersGetter)>} – transform function or an array of such functions. The transform function takes the http response body and headers and returns its transformed (typically deserialized) version.
+    - timeout – {number|Promise} – timeout in milliseconds, or promise that should abort the request when resolved.
+    - withCredentials - {boolean} - whether to set the withCredentials flag on the XHR object. See requests with credentials for more information.
+    - responseType - {string} - see requestType.
