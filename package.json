@@ -1,6 +1,6 @@
 {
   "name": "nqh",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An implementation of Angular's $http service for NodeJS",
   "main": "nqh.js",
   "private": false,
