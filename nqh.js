@@ -31,13 +31,25 @@ var nqh = module.exports = function(config) {
     }
   }
 
+
+  //transform the request
+  // if(_.isArray(config.transformRequest)){
+  //   _.foreach(config.transformRequest,function(fn){
+  //     fn(config.body,function(headerName){return config.headers[headerName];})
+  //   });
+  // }else if (_.isFunction(config.transformRequest)){
+  //   config.transformRequest(config.body,function(headerName){return config.headers[headerName];});
+  // }
+
+  //add the request to the pending request array
   nqh.pendingRequests.push(config);
 
   request({
     method:config.method,
     url : utils.buildUrl(config.url,config.params),
     headers:config.headers,
-    body:JSON.stringify(config.body)
+    body:JSON.stringify(config.body),
+    timeout : config.timeout
   },function (error, response, body) {
     _.remove(nqh.pendingRequests,config);
     if(error){
@@ -57,6 +69,16 @@ var nqh = module.exports = function(config) {
         config : config,
         statusText :  !_.isUndefined(data) && !_.isNull(data) && data ? data : hstd(response.statusCode)
       };
+
+      //transform the request
+      // if(_.isArray(config.transformResult)){
+      //   _.foreach(config.transformResult,function(fn){
+      //     fn(config.body,function(headerName){return config.headers[headerName];})
+      //   });
+      // }else if(_.isFunction(config.transformResult)){
+      //   config.transformResult(config.body,function(headerName){return config.headers[headerName];});
+      // }
+
       if(result.status <= 299 && result.status >= 200){
         if(config.cache && config.method === 'GET'){
           cache.set(config.url,result);

@@ -23,7 +23,7 @@ describe('nqh',function(){
     expect(nqh.pendingRequests).to.be.an('Array');
   });
 
-   describe('special promise callbacks',function(){
+  describe('special promise callbacks',function(){
     var server
       , app
       , reqPort = 4321;
@@ -431,6 +431,48 @@ describe('nqh',function(){
       server.close();
     });
   });//caching
+
+  describe('timeout',function(){
+    var server
+      , app
+      , reqPort = 4321;
+
+    before(function(){
+      app = express();
+      app.get('/',function(req,res){
+        var timeout = parseInt(req.query['timeout'])
+        setTimeout(function() {
+          res.status(200).send('timeout elapsed: ' +timeout );
+        }, timeout);
+      });
+
+      server = app.listen(reqPort);
+    });
+
+    it('should respect the given int timeout',function(done){
+      return nqh.get('http://localhost:'+reqPort+'?timeout='+900,{timeout:100})
+        .then(done,function(e){
+          expect(e).to.be.truely;
+          done();
+        })
+        .then(null,done);
+    });
+
+    it('should respect the given promise timeout',function(done){
+      var promise =  q.defer();
+      promise.resolve();
+      return nqh.get('http://localhost:'+reqPort+'?timeout='+900,{timeout:promise})
+        .then(done,function(e){
+          expect(e).to.be.truely;
+          done();
+        })
+        .then(null,done);
+    });
+
+    after(function(){
+      server.close();
+    });
+  });//timeout
 
 });//nqh
 
