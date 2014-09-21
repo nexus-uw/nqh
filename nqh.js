@@ -20,11 +20,13 @@ var cache = new NodeCache({
 // statusText – string – HTTP status text of the response.
 var nqh = module.exports = function(config) {
   var deferred = Q.defer();
+  var url = utils.buildUrl(config.url,config.params);
+
 
   //if the request is set to cache the GET result
   // and the url is found in the cache, then return the value and exit
   if(config.cache && config.method === 'GET'){
-    var cached = cache.get(config.url)[config.url];
+    var cached = cache.get(url)[url];
     if(cached){
       deferred.resolve(cached);
       return deferred.promise;
@@ -46,7 +48,7 @@ var nqh = module.exports = function(config) {
 
   request({
     method:config.method,
-    url : utils.buildUrl(config.url,config.params),
+    url : url,
     headers:config.headers,
     body:JSON.stringify(config.body),
     timeout : config.timeout
@@ -81,7 +83,7 @@ var nqh = module.exports = function(config) {
 
       if(result.status <= 299 && result.status >= 200){
         if(config.cache && config.method === 'GET'){
-          cache.set(config.url,result);
+          cache.set(url,result);
         }
         deferred.resolve(result);
       }else{

@@ -427,6 +427,20 @@ describe('nqh',function(){
       .then(null,done);
     });
 
+    it('should build the full url before caching',function(done){
+      var firstResult;
+      return nqh.get('http://localhost:'+reqPort+'/',{cache:true,params:{foo:'bar'}})
+        .then(function(result){
+        firstResult = result.data;
+        return nqh.get('http://localhost:'+reqPort+'/',{cache:true,params:{something:'else'}});
+      })
+      .then(function(result){
+        expect(result.data).to.not.equal(firstResult);
+        done();
+      })
+      .then(null,done);
+    });
+
     after(function(){
       server.close();
     });
