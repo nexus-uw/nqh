@@ -9,6 +9,7 @@ describe('utils',function(){
   it('should exist',function(){
     expect(utils).to.be.truely;
     expect(utils.buildUrl).to.be.a('function');
+    expect(utils.isJSON).to.be.a('function');
   });
 
   describe('buildUrl',function(){
@@ -35,4 +36,27 @@ describe('utils',function(){
       expect(utils.buildUrl(testUrl,testParams)).to.equal(testUrl+'?date='+testDate.toISOString())
     });
   });//buildUrl
+
+  describe('isJSON',function(){
+    it('should find "content-type":"application/json"',function(){
+      expect(utils.isJSON({'content-type':'application/json'})).to.be.true;
+    });
+
+    it('should return false if no "content-type" is present',function(){
+      expect(utils.isJSON({})).to.be.false;
+    });
+
+     it('should return false if no headers are given',function(){
+      expect(utils.isJSON()).to.be.false;
+    });
+
+    it('should return false if "content-type" is not json',function(){
+      expect(utils.isJSON({'content-type':'application/notjson'})).to.be.false;
+
+    });
+
+    it('should return true if "Content-Type" is json',function(){
+      expect(utils.isJSON({'Content-Type':'Application/JSON'})).to.be.true;
+    });
+  });
 });//utils

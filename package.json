@@ -1,6 +1,6 @@
 {
   "name": "nqh",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An implementation of Angular's $http service for NodeJS",
   "main": "nqh.js",
   "private": false,
@@ -38,6 +38,6 @@
     "codeclimate-test-reporter": "0.0.3",
     "express": "^4.7.1",
     "istanbul": "^0.3.0",
-    "mocha": "^1.20.1"
+    "mocha": "^2.1.0"
   }
 }

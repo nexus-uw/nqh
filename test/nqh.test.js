@@ -4,7 +4,9 @@ var expect = require('chai').expect
   , q = require('q')
   , express = require('express')
   , bodyParser = require('body-parser')
-  , nqh = require('../nqh');
+  , nqh = require('../nqh')
+var _ = require('lodash');
+
 
 describe('nqh',function(){
   it('should exist',function(){
@@ -136,25 +138,47 @@ describe('nqh',function(){
 
     before(function(){
       app = express();
-      app.use(bodyParser.json({strict:false}))
+      app.use(bodyParser.json());
+      app.use(bodyParser.text())
 
       app.post('/201', function(req, res){
-        if(req.body)
-          res.status(201).send('201 OK');
+        if(_.isObject(req.body)){
+          res.status(201).json(req.body).end();
+        }else if (req.body){
+          var f = req.body;
+          res.status(201).send(f).end();
+        }
         else
-          res.status(500).send('missing body....can not handle');
+          res.status(500).send('missing body....can not handle').end();
       });
       server = app.listen(reqPort);
     });
 
-    it('should make a POST request',function(done){
-      nqh.post('http://localhost:'+reqPort+'/201',{my:'body'})
-        .then(function(res){
-          expect(res.status).to.equal(201);
-          expect(res.data).to.equal('201 OK');
-          done();
-        })
-        .then(null,done);
+    it('should convert objects to json',function(){
+      var expected = {json:true} ;
+      return nqh.post('http://localhost:'+reqPort+'/201',expected,{headers:{'Content-Type':'application/json'}})
+      .then(function(res){
+        expect(res.status).to.equal(201);
+        expect(res.data).to.deep.equal(expected);
+      })
+    })
+
+    it('should convert arrays to json',function(){
+      var expected = [1,2,3] ;
+      return nqh.post('http://localhost:'+reqPort+'/201',expected)
+      .then(function(res){
+        expect(res.status).to.equal(201);
+        expect(res.data).to.deep.equal(expected);
+      })
+    })
+
+    it('should leave strings alone',function(){
+       var expected = 'just some string';
+      return nqh.post('http://localhost:'+reqPort+'/201',expected)
+      .then(function(res){
+        expect(res.status).to.equal(201);
+        expect(res.data).to.deep.equal(expected);
+      })
     });
 
     it('should reject the promise if the server responds with 400 level status',function(done){
