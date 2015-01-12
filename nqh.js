@@ -46,22 +46,35 @@ var nqh = module.exports = function(config) {
   //add the request to the pending request array
   nqh.pendingRequests.push(config);
 
+  if(!config.headers){
+    config.headers = {}
+  }
+  if(_.isUndefined(config.headers['Content-Type']) && config.body && !_.isObject(config.body)){
+    config.headers['Content-Type'] = 'text/plain';
+  }
+
   request({
     method:config.method,
     url : url,
     headers:config.headers,
-    body:JSON.stringify(config.body),
+    json: _.isArray(config.body) || _.isObject(config.body),
+    body:config.body ,//&& (_.isArray(config.body) || _.isObject(config.body)) ? JSON.stringify(config.body) : config.body,
     timeout : config.timeout
   },function (error, response, body) {
     _.remove(nqh.pendingRequests,config);
     if(error){
       deferred.reject(error);
     }else {
+
       var data;
-      //TODO: actually handle response data type
-      try{
-        data = JSON.parse(body);
-      }catch(e){
+      //if Request did not parse the response as JSON for some reason, parse it here....
+      if(_.isString(body) && utils.isJSON(response.headers)){
+        try{
+          data = JSON.parse(body);
+        }catch(e){
+          data = body;
+        }
+      }else{
         data = body;
       }
       var result = {
