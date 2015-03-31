@@ -19,3 +19,7 @@ Road Map
     - transformResponse – {function(data, headersGetter)|Array.<function(data, headersGetter)>} – transform function or an array of such functions. The transform function takes the http response body and headers and returns its transformed (typically deserialized) version.
     - withCredentials - {boolean} - whether to set the withCredentials flag on the XHR object. See requests with credentials for more information.
     - responseType - {string} - see requestType.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/nexus-uw/nqh/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
