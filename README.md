@@ -12,14 +12,15 @@ The caching layer uses [tcs-de/nodecache](https://github.com/tcs-de/nodecache) a
 
 Road Map
 --------
+ - generate typings
+ - make an Angular 2 version
+ - update to ES2015....
  - handle all config options
-    -  xsrfHeaderName – {string} – Name of HTTP header to populate with the XSRF token.
+    - xsrfHeaderName – {string} – Name of HTTP header to populate with the XSRF token.
     - xsrfCookieName – {string} – Name of cookie containing the XSRF token.
     - transformRequest – {function(data, headersGetter)|Array.<function(data, headersGetter)>} – transform function or an array of such functions. The transform function takes the http request body and headers and returns its transformed (typically serialized) version.
     - transformResponse – {function(data, headersGetter)|Array.<function(data, headersGetter)>} – transform function or an array of such functions. The transform function takes the http response body and headers and returns its transformed (typically deserialized) version.
     - withCredentials - {boolean} - whether to set the withCredentials flag on the XHR object. See requests with credentials for more information.
     - responseType - {string} - see requestType.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/nexus-uw/nqh/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+ - delete this useless project.....
 

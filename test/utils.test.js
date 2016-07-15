@@ -1,3 +1,5 @@
+/// <reference path="../typings/index.d.ts" />
+
 'use strict';
 
 var expect = require('chai').expect
