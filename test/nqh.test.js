@@ -1,3 +1,5 @@
+/// <reference path="../typings/index.d.ts" />
+
 'use strict';
 
 var expect = require('chai').expect
@@ -496,7 +498,8 @@ describe('nqh',function(){
         .then(null,done);
     });
 
-    it('should respect the given promise timeout',function(done){
+    // July 2016: request nolonger supports non number timeouts...
+    xit('should respect the given promise timeout',function(done){
       var promise =  q.defer();
       promise.resolve();
       return nqh.get('http://localhost:'+reqPort+'?timeout='+900,{timeout:promise})

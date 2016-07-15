@@ -1,15 +1,19 @@
+/// <reference path="typings/index.d.ts" />
+
+
 var request = require('request');
 var  Q = require('q');
 var _ = require('lodash');
 var utils = require('./lib/utils');
 var hstd = require('http-status-to-description');
-var NodeCache = require( "node-cache" );
+var NodeCache = require( 'node-cache');
 
 //caching layer
 var cache = new NodeCache({
   stdTTL : process.env.nqh_stdTTL || 0,
   checkperiod : process.env.nqh_checkperiod || 0
 });
+
 
 
 //returns a promise that resolves to an object with the following properties
@@ -26,7 +30,7 @@ var nqh = module.exports = function(config) {
   //if the request is set to cache the GET result
   // and the url is found in the cache, then return the value and exit
   if(config.cache && config.method === 'GET'){
-    var cached = cache.get(url)[url];
+    var cached = cache.get(url);
     if(cached){
       deferred.resolve(cached);
       return deferred.promise;
@@ -53,13 +57,18 @@ var nqh = module.exports = function(config) {
     config.headers['Content-Type'] = 'text/plain';
   }
 
+  // if timeout is  a promise, reject this reques promise when the timeout promise resolves
+  if(config.timeout && typeof config.timeout.resolve === 'function'){
+    config.timeout.promise.then(deferred.reject);
+  }
+
   request({
     method:config.method,
     url : url,
     headers:config.headers,
     json: _.isArray(config.body) || _.isObject(config.body),
     body:config.body ,//&& (_.isArray(config.body) || _.isObject(config.body)) ? JSON.stringify(config.body) : config.body,
-    timeout : config.timeout
+    timeout : typeof config.timeout === 'number' ? config.timeout : undefined
   },function (error, response, body) {
     _.remove(nqh.pendingRequests,config);
     if(error){
