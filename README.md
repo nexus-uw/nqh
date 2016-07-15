@@ -1,6 +1,6 @@
 nqh (Node Q $http)
 ===========
-[![Code Climate](https://codeclimate.com/github/nexus-uw/nqh.png)](https://codeclimate.com/github/nexus-uw/nqh) [![Test Coverage](https://codeclimate.com/github/nexus-uw/nqh/coverage.png)](https://codeclimate.com/github/nexus-uw/nqh)[![Dependency Status](https://gemnasium.com/nexus-uw/nqh.svg)](https://gemnasium.com/nexus-uw/nqh)
+[![Code Climate](https://codeclimate.com/github/nexus-uw/nqh.png)](https://codeclimate.com/github/nexus-uw/nqh) [![Test Coverage](https://codeclimate.com/github/nexus-uw/nqh/coverage.png)](https://codeclimate.com/github/nexus-uw/nqh)[![Dependency Status](https://gemnasium.com/nexus-uw/nqh.svg)](https://gemnasium.com/nexus-uw/nqh)[![NPM](https://nodei.co/npm/nqh.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nqh/)
 
 
 An implementation of [Angular's $http service](https://docs.angularjs.org/api/ng/service/$http) for node
