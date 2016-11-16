@@ -39,7 +39,7 @@
     "codeclimate-test-reporter": "0.4.0",
     "express": "^4.7.1",
     "istanbul": "^0.4.4",
-    "mocha": "^2.1.0",
+    "mocha": "^3.0.2",
     "tslint": "^3.13.0",
     "typescript": "^2.0.3",
     "typings": "^2.0.0"
