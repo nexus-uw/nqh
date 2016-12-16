@@ -40,7 +40,7 @@
     "express": "^4.7.1",
     "istanbul": "^0.4.4",
     "mocha": "^3.1.2",
-    "tslint": "^3.13.0",
+    "tslint": "^4.1.1",
     "typescript": "^2.0.3",
     "typings": "^2.0.0"
   }
