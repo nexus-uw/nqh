@@ -1,5 +1,7 @@
 nqh (Node Q $http)
 ===========
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/nexus-uw/nqh.svg)](https://greenkeeper.io/)
 [![Code Climate](https://codeclimate.com/github/nexus-uw/nqh.png)](https://codeclimate.com/github/nexus-uw/nqh) [![Test Coverage](https://codeclimate.com/github/nexus-uw/nqh/coverage.png)](https://codeclimate.com/github/nexus-uw/nqh)[![NPM](https://nodei.co/npm/nqh.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nqh/)
 
 
