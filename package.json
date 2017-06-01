@@ -36,7 +36,7 @@
   "devDependencies": {
     "body-parser": "^1.4.3",
     "chai": "^3.5.0",
-    "codeclimate-test-reporter": "0.4.1",
+    "codeclimate-test-reporter": "0.5.0",
     "express": "^4.7.1",
     "istanbul": "^0.4.4",
     "mocha": "^3.1.2",
